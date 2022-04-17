@@ -6,12 +6,11 @@ import sk.stuba.fei.uim.oop.app.gui.MyPanel;
 
 import java.awt.*;
 
-@Getter
-@Setter
 public abstract class MyShape implements Drawable {
     protected int x;
     protected int y;
     protected int size;
+    @Setter
     protected Color color;
     @Getter
     private final MyPanel canvas;
