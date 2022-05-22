@@ -1,9 +1,11 @@
 package sk.stuba.fei.uim.oop.app.gui;
 
+import sk.stuba.fei.uim.oop.app.logic.Modes;
 import sk.stuba.fei.uim.oop.app.shapes.Colors;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Arrays;
 
 public class App {
     public App() {
@@ -23,7 +25,7 @@ public class App {
         MyButton line = new MyButton("LINE", canvas.getHandler());
         MyButton colorChange = new MyButton("COLOR", canvas.getHandler());
 
-        JComboBox<String> color = new JComboBox<>(new String[]{"RED", "GREEN", "BLUE"});
+        JComboBox<String> color = new JComboBox<>(Arrays.stream(Colors.values()).map(Colors::name).toArray(String[]::new)/*new String[]{"RED", "GREEN", "BLUE"}*/);
         color.addItemListener(canvas.getHandler());
         color.setFocusable(false);
 

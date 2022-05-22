@@ -7,6 +7,7 @@ import sk.stuba.fei.uim.oop.app.shapes.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Locale;
 import java.util.Objects;
 
 public class EventHandler extends MouseAdapter implements ActionListener, ItemListener {
@@ -45,7 +46,7 @@ public class EventHandler extends MouseAdapter implements ActionListener, ItemLi
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        if (this.modeIs("COLOR")) {
+        if (this.modeIs(Modes.COLOR)) {
             MyShape shape = this.canvas.getMostFrontShape(e.getX(), e.getY());
             if (shape != null) {
                 shape.setColor(this.color);
@@ -56,11 +57,11 @@ public class EventHandler extends MouseAdapter implements ActionListener, ItemLi
 
     @Override
     public void mousePressed(MouseEvent e) {
-        if (this.modeIs("PLUS")){
+        if (this.modeIs(Modes.PLUS)){
             this.canvas.setShape(new Plus(e.getX(), e.getY(), this.color, this.canvas));
-        } else if (this.modeIs("RING")) {
+        } else if (this.modeIs(Modes.RING)) {
             this.canvas.setShape(new Ring(e.getX(), e.getY(), this.color, this.canvas));
-        } else if (this.modeIs("LINE")) {
+        } else if (this.modeIs(Modes.LINE)) {
             this.canvas.setShape(new Line(e.getX(), e.getY(), this.color, this.canvas));
         }
         this.originX = e.getX();
@@ -70,7 +71,7 @@ public class EventHandler extends MouseAdapter implements ActionListener, ItemLi
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        if (this.modeIs("PLUS") || this.modeIs("RING") || this.modeIs("LINE")) {
+        if (this.modeIsShapeKind()) {
             this.canvas.addShape();
             this.canvas.repaint();
         }
@@ -78,14 +79,27 @@ public class EventHandler extends MouseAdapter implements ActionListener, ItemLi
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        if (this.modeIs("PLUS") || this.modeIs("RING") || this.modeIs("LINE")) {
+        if (this.modeIsShapeKind()) {
             MyShape shape = this.canvas.getShape();
             shape.resize(this.originX, this.originY, e.getX(), e.getY());
             this.canvas.repaint();
         }
     }
 
-    private boolean modeIs(String mode) {
-        return Objects.equals(this.mode, mode);
+    private boolean modeIs(Modes mode) {
+        //return Objects.equals(this.mode, mode);
+        try {
+            return Objects.equals(Modes.valueOf(this.mode.toUpperCase(Locale.ROOT)), mode);
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+    }
+
+    private boolean modeIsShapeKind() {
+        try {
+            return Modes.valueOf(this.mode.toUpperCase(Locale.ROOT)).isShapeKind();
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
     }
 }
